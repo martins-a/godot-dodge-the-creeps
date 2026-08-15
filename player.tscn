@@ -5,6 +5,13 @@
 [ext_resource type="Texture2D" uid="uid://b4wnvmemoipqb" path="res://art/playerGrey_walk2.png" id="2_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://bib2yvvf6qago" path="res://art/playerGrey_up1.png" id="2_sweqy"]
 [ext_resource type="Texture2D" uid="uid://bhsjq847kc1ou" path="res://art/playerGrey_up2.png" id="3_2hs0m"]
+[ext_resource type="Script" uid="uid://bkoien0tkjthj" path="res://mob.gd" id="6_ivps1"]
+[ext_resource type="Texture2D" uid="uid://b0acjm3w2pj73" path="res://art/enemyFlyingAlt_1.png" id="7_urp6f"]
+[ext_resource type="Texture2D" uid="uid://cr52wdwsfnqqf" path="res://art/enemyFlyingAlt_2.png" id="8_bwjto"]
+[ext_resource type="Texture2D" uid="uid://8iqqoxluhej5" path="res://art/enemySwimming_1.png" id="9_606se"]
+[ext_resource type="Texture2D" uid="uid://b64tbuu6724xc" path="res://art/enemySwimming_2.png" id="10_u1c27"]
+[ext_resource type="Texture2D" uid="uid://y41d886ii8pv" path="res://art/enemyWalking_1.png" id="11_op7ga"]
+[ext_resource type="Texture2D" uid="uid://ciweg8bnliies" path="res://art/enemyWalking_2.png" id="12_q13i1"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_jbg4e"]
 animations = [{
@@ -35,7 +42,47 @@ animations = [{
 radius = 27.0
 height = 68.0
 
-[node name="Main" type="Node2D" unique_id=857389292]
+[sub_resource type="SpriteFrames" id="SpriteFrames_mu1pp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_urp6f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_bwjto")
+}],
+"loop": 1,
+"name": &"fly",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_606se")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_u1c27")
+}],
+"loop": 1,
+"name": &"swim",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_op7ga")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_q13i1")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 3.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5gplv"]
+radius = 41.0
+height = 82.0
+
+[node name="Main" type="Node" unique_id=1586416995]
 
 [node name="Player" type="Area2D" parent="." unique_id=1642907358]
 script = ExtResource("1_i3pqv")
@@ -49,4 +96,30 @@ animation = &"up"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=659185393]
 shape = SubResource("CapsuleShape2D_jbg4e")
 
+[node name="Mob" type="RigidBody2D" parent="." unique_id=618317058]
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("6_ivps1")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Mob" unique_id=1318997267]
+scale = Vector2(0.75, 0.75)
+sprite_frames = SubResource("SpriteFrames_mu1pp")
+animation = &"fly"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Mob" unique_id=255822378]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_5gplv")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="Mob" unique_id=1710464704]
+
+[node name="MobTimer" type="Timer" parent="." unique_id=1644152236]
+
+[node name="ScoreTimer" type="Timer" parent="." unique_id=1086920945]
+
+[node name="StartTimer" type="Timer" parent="." unique_id=565879585]
+
+[node name="StartPosition" type="Marker2D" parent="." unique_id=165518881]
+
 [connection signal="body_entered" from="Player" to="Player" method="_on_body_entered"]
+[connection signal="screen_exited" from="Mob/VisibleOnScreenNotifier2D" to="Player" method="_on_visible_on_screen_notifier_2d_screen_exited"]

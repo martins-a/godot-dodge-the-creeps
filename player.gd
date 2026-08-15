@@ -8,7 +8,7 @@ var screen_size # Size of the game window.
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
-	hide()
+	#hide()
 	
 func start(pos):
 	position = pos
@@ -55,3 +55,7 @@ func _on_body_entered(body: Node2D) -> void:
 	hit.emit()
 	# Must be deferred as we can't change physics properties on a physics callback.
 	$CollisionShape2D.set_deferred("disabled", true)
+
+
+func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
+	queue_free()
