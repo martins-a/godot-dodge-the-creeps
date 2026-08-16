@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dxrn8bsqdjmgb" path="res://player.gd" id="1_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://dcpw5eggyaa0y" path="res://art/playerGrey_walk1.png" id="1_onrkg"]
+[ext_resource type="Script" uid="uid://n4v8ycsdnao3" path="res://main.gd" id="1_urp6f"]
 [ext_resource type="Texture2D" uid="uid://b4wnvmemoipqb" path="res://art/playerGrey_walk2.png" id="2_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://bib2yvvf6qago" path="res://art/playerGrey_up1.png" id="2_sweqy"]
 [ext_resource type="Texture2D" uid="uid://bhsjq847kc1ou" path="res://art/playerGrey_up2.png" id="3_2hs0m"]
@@ -82,7 +83,14 @@ animations = [{
 radius = 41.0
 height = 82.0
 
+[sub_resource type="Curve2D" id="Curve2D_bwjto"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 472, 712, 0, 0, 0, 0, -8, 712, 0, 0, 0, 0, 8, 8, 0, 0, 0, 0, -8, 360, 0, 0, 0, 0, -8, 360, 0, 0, 0, 0, 8, 8)
+}
+point_count = 9
+
 [node name="Main" type="Node" unique_id=1586416995]
+script = ExtResource("1_urp6f")
 
 [node name="Player" type="Area2D" parent="." unique_id=1642907358]
 script = ExtResource("1_i3pqv")
@@ -114,12 +122,23 @@ shape = SubResource("CapsuleShape2D_5gplv")
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="Mob" unique_id=1710464704]
 
 [node name="MobTimer" type="Timer" parent="." unique_id=1644152236]
+wait_time = 0.5
 
 [node name="ScoreTimer" type="Timer" parent="." unique_id=1086920945]
 
 [node name="StartTimer" type="Timer" parent="." unique_id=565879585]
+wait_time = 2.0
+one_shot = true
 
 [node name="StartPosition" type="Marker2D" parent="." unique_id=165518881]
+position = Vector2(240, 450)
+
+[node name="MobPath" type="Path2D" parent="." unique_id=1849803839]
+curve = SubResource("Curve2D_bwjto")
+
+[node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath" unique_id=87695569]
+position = Vector2(8, 8)
+rotation = -2.3561945
 
 [connection signal="body_entered" from="Player" to="Player" method="_on_body_entered"]
 [connection signal="screen_exited" from="Mob/VisibleOnScreenNotifier2D" to="Player" method="_on_visible_on_screen_notifier_2d_screen_exited"]
